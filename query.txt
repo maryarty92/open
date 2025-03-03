@@ -1,0 +1,20 @@
+[out:json][timeout:25];
+// fetch area “яр-сале” to search in
+{{geocodeArea:яр-сале}}->.searchArea;
+
+// gather results
+(
+  // Combining queries for "highway"
+  way["highway"~"^(primary|secondary)$"](area.searchArea);
+
+  // Combining similar queries for "amenity"
+  nwr["amenity"~"^(school|library|college|kindergarten|doctors|community_centre|post_office|bank|police|place_of_worship|restaurant|prison|cafe|driving_school)$"](area.searchArea);
+
+  // Queries for "tourism" and "shop"
+  nwr["tourism"="hotel"](area.searchArea);
+  nwr["shop"~"^(houseware|farm|hairdresser|beauty|butcher|greengrocer|hardware|clother|car_parts)$"](area.searchArea);
+);
+
+// print results
+out geom;
+out meta;
